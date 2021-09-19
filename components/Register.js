@@ -25,6 +25,7 @@ export default function Register(props) {
     })
     const [passwordConfirmCondition, setPasswordConfirmCondition] = React.useState(false);
     const [terms, setTerms] = React.useState(false);
+    const [result, setResult] = React.useState("Nope")
 
     const checkPassword = (value) => {
         setPassword(value);
@@ -83,6 +84,69 @@ export default function Register(props) {
             setEmailCondition(false);
         }
     }
+
+    const validateRegistration = () => {
+        if (
+            username
+            &&
+            emailCondition
+            &&
+            Object.values(passwordConditions).every(Boolean)
+            &&
+            passwordConfirmCondition
+            &&
+            terms
+        ) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    // const registerUser = async () => {
+    //     try {
+    //         const response = await fetch("http:/192.168.63.87/", {
+    //             method: 'POST',
+    //             headers: {
+    //                 Accept: 'application/json',
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({
+    //                 username: username,
+    //                 email: email,
+    //                 password: password 
+    //             })
+    //         })
+    //         return setResult(response);
+    //     }
+    //     catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+    const registerUser = async () => {
+        try {
+        //   const response = await fetch(
+        //     process.env.BACKEND_URL + '/register'
+        //   );
+          const response = await fetch(process.env.BACKEND_URL + '/register', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password 
+            })
+        })
+        //   const json = await response.json();
+          return setResult(response.result);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     return (
     <Layout style={{flex: 1, flexDirection: 'column'}}>
@@ -148,7 +212,11 @@ export default function Register(props) {
                         </CheckBox>
                     </Layout>
                     <Layout style={{flex: 2, justifyContent: "center"}} level='1'>
-                        <Button>
+                        <Button
+                        disabled={validateRegistration()}
+                        onPress={() => {
+                            registerUser()
+                        }}>
                             Register
                         </Button>
                     </Layout>
