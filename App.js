@@ -1,4 +1,6 @@
 import React from 'react';
+import Register from "./components/Register";
+import Login from "./components/Login";
 import GroupList from "./components/GroupList";
 import GroupPage from "./components/GroupPage";
 import ExpenseDetails from "./components/ExpenseDetails";
@@ -29,6 +31,14 @@ export default function App() {
     <ApplicationProvider {...eva} theme={{...eva[theme], ...defaultTheme}}>
     <NavigationContainer>
       <Stack.Navigator>
+            <Stack.Screen
+            name="Register"
+            component={Register}
+            />
+            <Stack.Screen
+            name="Login"
+            component={Login}
+            />
             <Stack.Screen
             name="GroupList"
             component={GroupList}
